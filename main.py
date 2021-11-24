@@ -6,6 +6,7 @@ import sys
 import os
 from math import pi
 import yaml
+import turtle
 
 class Circle:
     def __init__(self, radius, fill ='red', stroke='black', at=(0,0)):
@@ -44,11 +45,39 @@ class Circle:
         return obj
 
 class Quad:
-    def __init__(self, width, height, fill ='green', stroke='pink'):
+    def __init__(self, width, height, fill ='green', stroke='pink', at=(0,0)):
         self._height = height
         self._width = width
         self._fill = fill
         self._stroke = stroke
+        self._at = at
+
+    @property
+    def left(self):
+        return self._at[0] - self._width/2
+
+    @property
+    def top(self):
+        return self._at[1] + self._height/2
+
+    @property
+    def bottom(self):
+        return self._at[1] +  / 2
+
+    @property
+    def bottom(self):
+        return self._at[] +  / 2
+
+
+    @property
+    def vertices(self):
+        '''Starting from the top left counter clockwise'''
+        return [
+            (self.left, self.top),
+            (self.left, self.bottom),
+            (self.right, self.bottom),
+            (self.right, self.top)
+        ]
 
     def area(self):
         return float(self.width * self._height)
@@ -65,6 +94,13 @@ class Text:
         self._font = font
         self._size = size
         self._color = color
+
+    def write(self, pen, *args, **kwargs):
+        pen.up()
+        pen.goto(self._at)
+        pen.down()
+        pen.write(self._text, *args, **kwargs)
+        pen.up()
 
 
 
@@ -92,6 +128,23 @@ circle:
   stroke: red
     '''
     my_circle = Circle.from_yaml(yaml_circle)
+    turtle.circle(50.0, 90)
+    turtle.done()
+
+    pen = turtle.Turtle()
+    text = Text('Me writing')
+
+    #quad
+    quad = Quad(200, 60, at=(215,-5))
+    print(f"vertices = {quad.vertices}")
+    quad.draw(pen)
+
+    #canvas
+    canvas = Canvas(1000, 700)
+    canvas.draw_axes()
+
+    turtle.done()
+
     return 0 # Press ⌘F8 to toggle the breakpoint.
 
 
